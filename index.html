@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Echo Chamber Detector</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f3f4f7; padding: 20px; }
+    h1 { color: #333; }
+    textarea { width: 100%; height: 100px; padding: 10px; }
+    button { margin-top: 10px; padding: 10px 20px; }
+    .result { margin-top: 20px; background: white; padding: 15px; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <h1>Detect Echo Chambers and Ideological Drift</h1>
+
+  <form id="detectForm">
+    <label>Enter a social media post or discussion snippet:</label><br>
+    <textarea name="post" id="post"></textarea><br>
+    <button type="submit">Analyze</button>
+  </form>
+
+  <div id="output" class="result" style="display:none;">
+    <h3>Analysis Result</h3>
+    <p><strong>Echo Chamber Score:</strong> <span id="echo"></span></p>
+    <p><strong>Ideological Drift:</strong> <span id="drift"></span></p>
+    <p><strong>Status:</strong> <span id="status"></span></p>
+  </div>
+
+  <script>
+    const form = document.getElementById('detectForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const response = await fetch('/detect', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await response.json();
+      document.getElementById('echo').innerText = data.echo_chamber_score;
+      document.getElementById('drift').innerText = data.ideological_drift;
+      document.getElementById('status').innerText = data.status;
+      document.getElementById('output').style.display = 'block';
+    });
+  </script>
+</body>
+</html>
